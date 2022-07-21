@@ -10,6 +10,8 @@ namespace _2D_Game_Shooter
         private int _backgroundSpeed;
         private Random _random;
 
+        readonly int _playersSpeed = 1;
+
         public Form1()
         {
             InitializeComponent();
@@ -67,6 +69,81 @@ namespace _2D_Game_Shooter
                     _clouds[i].Left = _clouds[i].Left;
                 }
             }
+        }
+
+        private void LeftMoveTimer_Tick(object sender, EventArgs e)
+        {
+            if (picBoxCowBoy.Left > 10)
+            {
+                picBoxCowBoy.Left -= _playersSpeed;
+            }
+        }
+
+        private void RightMoveTimer_Tick(object sender, EventArgs e)
+        {
+            if (picBoxCowBoy.Right < 1150)
+            {
+                picBoxCowBoy.Left += _playersSpeed;
+            }
+        }
+
+        private void UpMoveTimer_Tick(object sender, EventArgs e)
+        {
+            picBoxCowBoy.Top -= _playersSpeed;
+        }
+
+        private void DownMoveTimer_Tick(object sender, EventArgs e)
+        {
+            picBoxCowBoy.Top += _playersSpeed;
+        }
+
+
+        /// <summary>
+        /// Когда нажимаем клавиши (стрелки): меняется стоящая картинка ковбоя на идущего ковбоя, и запускаются таймеры.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">нажатая клавиша</param>
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            picBoxCowBoy.Image = Properties.Resources.Cowboy_Run;
+
+            switch (e.KeyCode)
+            {
+                case Keys.Left:
+                case Keys.A:
+                    LeftMoveTimer.Start();
+                    break;
+
+                case Keys.Right:
+                case Keys.D:
+                    RightMoveTimer.Start();
+                    break;
+
+                case Keys.Up:
+                case Keys.W:
+                    UpMoveTimer.Start();
+                    break;
+
+                case Keys.Down:
+                case Keys.S:
+                    DownMoveTimer.Start();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Когда отпускаем клавиши (стрелки): меняется идущая картинка ковбоя на стоящего ковбоя, и останавливаются все таймеры.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            picBoxCowBoy.Image = Properties.Resources.Cowboy_Static;
+
+            LeftMoveTimer.Stop();
+            RightMoveTimer.Stop();
+            UpMoveTimer.Stop();
+            DownMoveTimer.Stop();
         }
     }
 }
