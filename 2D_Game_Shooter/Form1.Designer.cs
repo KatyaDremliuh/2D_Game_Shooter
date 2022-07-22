@@ -36,6 +36,7 @@
             this.DownMoveTimer = new System.Windows.Forms.Timer(this.components);
             this.UpMoveTimer = new System.Windows.Forms.Timer(this.components);
             this.MoveBulletsTimer = new System.Windows.Forms.Timer(this.components);
+            this.MoveEnemiesTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picBoxCowBoy)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,6 +83,12 @@
             this.MoveBulletsTimer.Interval = 10;
             this.MoveBulletsTimer.Tick += new System.EventHandler(this.MoveBulletsTimer_Tick);
             // 
+            // MoveEnemiesTimer
+            // 
+            this.MoveEnemiesTimer.Enabled = true;
+            this.MoveEnemiesTimer.Interval = 10;
+            this.MoveEnemiesTimer.Tick += new System.EventHandler(this.MoveEnemiesTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -110,6 +117,7 @@
         private System.Windows.Forms.Timer DownMoveTimer;
         private System.Windows.Forms.Timer UpMoveTimer;
         private System.Windows.Forms.Timer MoveBulletsTimer;
+        private System.Windows.Forms.Timer MoveEnemiesTimer;
     }
 }
 

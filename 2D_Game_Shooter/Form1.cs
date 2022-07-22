@@ -18,6 +18,11 @@ namespace _2D_Game_Shooter
 
         private WindowsMediaPlayer _shootSound;
         private WindowsMediaPlayer _gameSound;
+        private WindowsMediaPlayer _enemyKilledSound;
+
+        private PictureBox[] _enemies; // враги
+        private int _enemySize;
+        private int _enemySpeed;
 
         public Form1()
         {
@@ -89,7 +94,36 @@ namespace _2D_Game_Shooter
             _gameSound.settings.setMode("loop", true);
             _gameSound.settings.volume = 5;
 
+            _enemyKilledSound = new WindowsMediaPlayer()
+            {
+                URL = "Sound\\ShootSound.wav\\EnemyKilledSound",
+                settings = { volume = 30, },
+            };
+
             _gameSound.controls.play();
+
+            #endregion
+
+            #region Enemies
+
+            Image enemyVirus = Image.FromFile("Assets\\Virus.gif");
+
+            const int countOfEnemies = 4;
+            _enemies = new PictureBox[countOfEnemies];
+            _enemySize = _random.Next(60, 90);
+            _enemySpeed = 3;
+
+            for (int i = 0; i < _enemies.Length; i++)
+            {
+                _enemies[i] = new PictureBox();
+                _enemies[i].Size = new Size(_enemySize, _enemySize);
+                _enemies[i].SizeMode = PictureBoxSizeMode.Zoom; // подогнать размер гиф под р-р PictureBox
+                _enemies[i].BackColor = Color.Transparent;
+                _enemies[i].Image = enemyVirus;
+                _enemies[i].Location = new Point((i + 1) * _random.Next(90, 100) + 1080, _random.Next(450, 600)); // локация врагов
+
+                this.Controls.Add(_enemies[i]);
+            }
 
             #endregion
         }
@@ -117,6 +151,8 @@ namespace _2D_Game_Shooter
             }
         }
 
+        #region MovingCharacterTimers
+
         private void LeftMoveTimer_Tick(object sender, EventArgs e)
         {
             if (picBoxCowBoy.Left > 10)
@@ -143,6 +179,7 @@ namespace _2D_Game_Shooter
             picBoxCowBoy.Top += PlayersSpeed;
         }
 
+        #endregion
 
         /// <summary>
         /// Когда нажимаем клавиши (стрелки): меняется стоящая картинка ковбоя на идущего ковбоя, и запускаются таймеры.
@@ -188,6 +225,8 @@ namespace _2D_Game_Shooter
 
                 for (int i = 0; i < _bullets.Length; i++)
                 {
+                    IntersectionCharacterWithEnemy();
+
                     if (_bullets[i].Left > this.Width)
                     {
                         _bullets[i].Location = new Point(picBoxCowBoy.Location.X + 100 + i * 50, picBoxCowBoy.Location.Y + 50);
@@ -218,6 +257,49 @@ namespace _2D_Game_Shooter
             for (int i = 0; i < _bullets.Length; i++)
             {
                 _bullets[i].Left += _bulletSpeed; // придать ускорение пуле
+            }
+        }
+
+        private void MoveEnemiesTimer_Tick(object sender, EventArgs e)
+        {
+            MoveEnemies(enemies: _enemies, enemySpeed: _enemySpeed);
+        }
+
+        private void MoveEnemies(PictureBox[] enemies, int enemySpeed)
+        {
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i].Left -=
+                    enemySpeed + (int)(Math.Sin(enemies[i].Left * Math.PI / 180) + Math.Sin(enemies[i].Left * Math.PI / 180));
+
+                IntersectionCharacterWithEnemy();
+
+                // если враги вышли за пределы поля (слева) - вернуть их на место (в правую часть, откуда пришли)
+                if (enemies[i].Left < this.Left)
+                {
+                    int enemySize = _random.Next(60, 90);
+                    enemies[i].Size = new Size(enemySize, enemySize);
+                    enemies[i].Location = new Point((i + 1) * _random.Next(150, 250) + 1080, _random.Next(450, 650));
+                }
+            }
+        }
+
+        private void IntersectionCharacterWithEnemy()
+        {
+            for (int i = 0; i < _enemies.Length; i++)
+            {
+                if (_bullets[0].Bounds.IntersectsWith(_enemies[i].Bounds))
+                {
+                    _enemyKilledSound.controls.play();
+
+                    _enemies[i].Location = new Point((i + 1) * _random.Next(150, 250) + 1280, _random.Next(420, 600));
+                    _bullets[0].Location = new Point(2000, picBoxCowBoy.Location.Y + 50);
+                }
+
+                if (picBoxCowBoy.Bounds.IntersectsWith(_enemies[i].Bounds))
+                {
+                    picBoxCowBoy.Visible = false;
+                }
             }
         }
     }
