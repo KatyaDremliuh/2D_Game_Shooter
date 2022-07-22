@@ -12,6 +12,9 @@ namespace _2D_Game_Shooter
 
         readonly int _playersSpeed = 1;
 
+        private PictureBox[] _bullets; // патроны
+        private int _bulletSpeed;
+
         public Form1()
         {
             InitializeComponent();
@@ -19,6 +22,8 @@ namespace _2D_Game_Shooter
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            #region Clouds
+
             const int countOfClouds = 20;
 
             _backgroundSpeed = 5;
@@ -46,6 +51,26 @@ namespace _2D_Game_Shooter
 
                 this.Controls.Add(_clouds[i]);
             }
+
+            #endregion
+
+            #region BulletsShooting
+
+            int countOfShots = 1;
+            _bullets = new PictureBox[countOfShots];
+            _bulletSpeed = 80;
+
+            for (int i = 0; i < _bullets.Length; i++)
+            {
+                _bullets[i] = new PictureBox();
+                _bullets[i].BorderStyle = BorderStyle.None;
+                _bullets[i].Size = new Size(20, 5);
+                _bullets[i].BackColor = Color.GhostWhite;
+
+                this.Controls.Add(_bullets[i]);
+            }
+
+            #endregion
         }
 
         private void MoveBigTimer_Tick(object sender, EventArgs e)
@@ -105,6 +130,8 @@ namespace _2D_Game_Shooter
         /// <param name="e">нажатая клавиша</param>
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            #region CowboyControl
+
             picBoxCowBoy.Image = Properties.Resources.Cowboy_Run;
 
             switch (e.KeyCode)
@@ -129,6 +156,23 @@ namespace _2D_Game_Shooter
                     DownMoveTimer.Start();
                     break;
             }
+
+            #endregion
+
+            #region BulletsControl
+
+            if (e.KeyCode == Keys.Space)
+            {
+                for (int i = 0; i < _bullets.Length; i++)
+                {
+                    if (_bullets[i].Left > this.Width)
+                    {
+                        _bullets[i].Location = new Point(picBoxCowBoy.Location.X + 100 + i * 50, picBoxCowBoy.Location.Y + 50);
+                    }
+                }
+            }
+
+            #endregion
         }
 
         /// <summary>
@@ -144,6 +188,14 @@ namespace _2D_Game_Shooter
             RightMoveTimer.Stop();
             UpMoveTimer.Stop();
             DownMoveTimer.Stop();
+        }
+
+        private void MoveBulletsTimer_Tick(object sender, EventArgs e)
+        {
+            for (int i = 0; i < _bullets.Length; i++)
+            {
+                _bullets[i].Left += _bulletSpeed; // придать ускорение пуле
+            }
         }
     }
 }
