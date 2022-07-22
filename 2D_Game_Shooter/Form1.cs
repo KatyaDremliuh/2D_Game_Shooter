@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using WMPLib;
 
 namespace _2D_Game_Shooter
 {
@@ -11,25 +10,17 @@ namespace _2D_Game_Shooter
         private int _backgroundSpeed;
         private Random _random;
 
-        private const int PlayersSpeed = 1;
+        readonly int _playersSpeed = 1;
 
-        private PictureBox[] _bullets; // патроны
-        private const int BulletsSpeed = 80;
-
-        private WindowsMediaPlayer _gunshotSound; // звук выстрела
-        private WindowsMediaPlayer _gameSound; // звук игры
-
-        public Form1(WindowsMediaPlayer gameSound)
+        public Form1()
         {
-            this._gameSound = gameSound;
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            #region CloudsBackground
-
             const int countOfClouds = 20;
+
             _backgroundSpeed = 5;
             _clouds = new PictureBox[countOfClouds];
             _random = new Random();
@@ -55,41 +46,6 @@ namespace _2D_Game_Shooter
 
                 this.Controls.Add(_clouds[i]);
             }
-
-            #endregion
-
-            #region BulletsAndShootingSound
-
-            const int countOfBullets = 1;
-            _bullets = new PictureBox[countOfBullets];
-
-            for (int i = 0; i < _bullets.Length; i++)
-            {
-                _bullets[i] = new PictureBox();
-                _bullets[i].BorderStyle = BorderStyle.None;
-                _bullets[i].Size = new Size(20, 5);
-                _bullets[i].BackColor = Color.White;
-
-                this.Controls.Add(_bullets[i]);
-            }
-
-            _gunshotSound = new WindowsMediaPlayer();
-            _gunshotSound.URL = "";
-            _gunshotSound.settings.volume = 5;
-
-            #endregion
-            //System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources._15035);//Use your own filename in place of _15035
-            //player.Play();
-            #region GameSound
-
-            _gameSound = new WindowsMediaPlayer();
-            _gameSound.URL = "";
-            _gameSound.settings.setMode("loop", true);
-            _gameSound.settings.volume = 15;
-
-            _gameSound.controls.play();
-
-            #endregion
         }
 
         private void MoveBigTimer_Tick(object sender, EventArgs e)
@@ -119,7 +75,7 @@ namespace _2D_Game_Shooter
         {
             if (picBoxCowBoy.Left > 10)
             {
-                picBoxCowBoy.Left -= PlayersSpeed;
+                picBoxCowBoy.Left -= _playersSpeed;
             }
         }
 
@@ -127,21 +83,20 @@ namespace _2D_Game_Shooter
         {
             if (picBoxCowBoy.Right < 1150)
             {
-                picBoxCowBoy.Left += PlayersSpeed;
+                picBoxCowBoy.Left += _playersSpeed;
             }
         }
 
         private void UpMoveTimer_Tick(object sender, EventArgs e)
         {
-            picBoxCowBoy.Top -= PlayersSpeed;
+            picBoxCowBoy.Top -= _playersSpeed;
         }
 
         private void DownMoveTimer_Tick(object sender, EventArgs e)
         {
-            picBoxCowBoy.Top += PlayersSpeed;
+            picBoxCowBoy.Top += _playersSpeed;
         }
 
-        #region CowBoyMovingWithKeyboard
 
         /// <summary>
         /// Когда нажимаем клавиши (стрелки): меняется стоящая картинка ковбоя на идущего ковбоя, и запускаются таймеры.
@@ -174,22 +129,6 @@ namespace _2D_Game_Shooter
                     DownMoveTimer.Start();
                     break;
             }
-
-            #region Bullets
-
-            if (e.KeyCode == Keys.Space)
-            {
-                _gunshotSound.controls.play();
-                for (int i = 0; i < _bullets.Length; i++)
-                {
-                    if (_bullets[i].Left > this.Width)
-                    {
-                        _bullets[i].Location = new Point(picBoxCowBoy.Location.X + 100 + i * 50, picBoxCowBoy.Location.Y + 50);
-                    }
-                }
-            }
-
-            #endregion
         }
 
         /// <summary>
@@ -205,17 +144,6 @@ namespace _2D_Game_Shooter
             RightMoveTimer.Stop();
             UpMoveTimer.Stop();
             DownMoveTimer.Stop();
-        }
-
-        #endregion
-
-        private void MoveBulletsTimer_Tick(object sender, EventArgs e)
-        {
-            // ускорение пуль
-            for (int i = 0; i < _bullets.Length; i++)
-            {
-                _bullets[i].Left += BulletsSpeed;
-            }
         }
     }
 }
