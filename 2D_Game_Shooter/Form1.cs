@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using WMPLib;
 
 namespace _2D_Game_Shooter
 {
@@ -10,10 +11,13 @@ namespace _2D_Game_Shooter
         private int _backgroundSpeed;
         private Random _random;
 
-        readonly int _playersSpeed = 1;
+        private const int PlayersSpeed = 1;
 
         private PictureBox[] _bullets; // патроны
         private int _bulletSpeed;
+
+        private WindowsMediaPlayer _shootSound;
+        private WindowsMediaPlayer _gameSound;
 
         public Form1()
         {
@@ -71,6 +75,23 @@ namespace _2D_Game_Shooter
             }
 
             #endregion
+
+            #region Sound
+
+            _shootSound = new WindowsMediaPlayer
+            {
+                URL = "Sound\\ShootSound.wav",
+                settings = { volume = 5, },
+            };
+
+            _gameSound = new WindowsMediaPlayer();
+            _gameSound.URL = "Sound\\Kane_Brown_Like_I_Love_Country_Music.wav";
+            _gameSound.settings.setMode("loop", true);
+            _gameSound.settings.volume = 5;
+
+            _gameSound.controls.play();
+
+            #endregion
         }
 
         private void MoveBigTimer_Tick(object sender, EventArgs e)
@@ -100,7 +121,7 @@ namespace _2D_Game_Shooter
         {
             if (picBoxCowBoy.Left > 10)
             {
-                picBoxCowBoy.Left -= _playersSpeed;
+                picBoxCowBoy.Left -= PlayersSpeed;
             }
         }
 
@@ -108,18 +129,18 @@ namespace _2D_Game_Shooter
         {
             if (picBoxCowBoy.Right < 1150)
             {
-                picBoxCowBoy.Left += _playersSpeed;
+                picBoxCowBoy.Left += PlayersSpeed;
             }
         }
 
         private void UpMoveTimer_Tick(object sender, EventArgs e)
         {
-            picBoxCowBoy.Top -= _playersSpeed;
+            picBoxCowBoy.Top -= PlayersSpeed;
         }
 
         private void DownMoveTimer_Tick(object sender, EventArgs e)
         {
-            picBoxCowBoy.Top += _playersSpeed;
+            picBoxCowBoy.Top += PlayersSpeed;
         }
 
 
@@ -163,6 +184,8 @@ namespace _2D_Game_Shooter
 
             if (e.KeyCode == Keys.Space)
             {
+                _shootSound.controls.play();
+
                 for (int i = 0; i < _bullets.Length; i++)
                 {
                     if (_bullets[i].Left > this.Width)
