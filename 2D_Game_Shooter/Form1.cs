@@ -19,10 +19,14 @@ namespace _2D_Game_Shooter
         private WindowsMediaPlayer _shootSound;
         private WindowsMediaPlayer _gameSound;
         private WindowsMediaPlayer _enemyKilledSound;
+        private WindowsMediaPlayer _gameOverSound;
 
         private PictureBox[] _enemies; // враги
         private int _enemySize;
         private int _enemySpeed;
+
+        public int Score { get; private set; }
+        public int Level { get; private set; }
 
         public Form1()
         {
@@ -104,6 +108,13 @@ namespace _2D_Game_Shooter
 
             #endregion
 
+            #region ScoreLevel
+
+            Score = 0;
+            Level = 1;
+
+            #endregion
+
             #region Sound
 
             _shootSound = new WindowsMediaPlayer
@@ -124,6 +135,12 @@ namespace _2D_Game_Shooter
             };
 
             _gameSound.controls.play();
+
+            _gameOverSound = new WindowsMediaPlayer()
+            {
+                URL = "Sound\\GameOverSound.wav",
+                settings = { volume = 10, },
+            };
 
             #endregion
         }
@@ -292,6 +309,8 @@ namespace _2D_Game_Shooter
                 {
                     _enemyKilledSound.controls.play();
 
+                    RaiseScoreAndLevel();
+
                     _enemies[i].Location = new Point((i + 1) * _random.Next(150, 250) + 1280, _random.Next(420, 600));
                     _bullets[0].Location = new Point(2000, picBoxCowBoy.Location.Y + 50);
                 }
@@ -299,7 +318,38 @@ namespace _2D_Game_Shooter
                 if (picBoxCowBoy.Bounds.IntersectsWith(_enemies[i].Bounds))
                 {
                     picBoxCowBoy.Visible = false;
+
+                    GameOver("Game Over");
                 }
+            }
+        }
+
+        private void GameOver(string str)
+        {
+            lblGameOver.Text = str;
+            lblGameOver.Location = new Point(500, 50);
+            lblGameOver.Visible = true;
+
+            _gameSound.controls.stop();
+            MoveEnemiesTimer.Stop();
+
+            _gameOverSound.controls.play();
+        }
+
+        private void RaiseScoreAndLevel()
+        {
+            Score += 1;
+            lblScore.Text = (Score < 10) ? "0" + Score : Score.ToString();
+
+            if (Score % 10 == 0)
+            {
+                Level += 1;
+                lblLevel.Text = (Level < 10) ? "0" + Level : Level.ToString();
+            }
+
+            if (Level == 3)
+            {
+                this.BackgroundImage = Image.FromFile("Assets\\BackgroundDesert.jpg");
             }
         }
     }

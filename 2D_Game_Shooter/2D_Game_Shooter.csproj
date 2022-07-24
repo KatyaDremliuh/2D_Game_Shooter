@@ -152,5 +152,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Sound\EnemyKilledSound.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sound\GameOverSound.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Image\BackgroundDesert.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
