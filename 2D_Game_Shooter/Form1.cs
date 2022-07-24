@@ -11,7 +11,7 @@ namespace _2D_Game_Shooter
         private int _backgroundSpeed;
         private Random _random;
 
-        private const int PlayersSpeed = 1;
+        private const int PlayersSpeed = 3;
 
         private PictureBox[] _bullets; // патроны
         private int _bulletSpeed;
@@ -81,29 +81,6 @@ namespace _2D_Game_Shooter
 
             #endregion
 
-            #region Sound
-
-            _shootSound = new WindowsMediaPlayer
-            {
-                URL = "Sound\\ShootSound.wav",
-                settings = { volume = 5, },
-            };
-
-            _gameSound = new WindowsMediaPlayer();
-            _gameSound.URL = "Sound\\Kane_Brown_Like_I_Love_Country_Music.wav";
-            _gameSound.settings.setMode("loop", true);
-            _gameSound.settings.volume = 5;
-
-            _enemyKilledSound = new WindowsMediaPlayer()
-            {
-                URL = "Sound\\ShootSound.wav\\EnemyKilledSound",
-                settings = { volume = 30, },
-            };
-
-            _gameSound.controls.play();
-
-            #endregion
-
             #region Enemies
 
             Image enemyVirus = Image.FromFile("Assets\\Virus.gif");
@@ -124,6 +101,29 @@ namespace _2D_Game_Shooter
 
                 this.Controls.Add(_enemies[i]);
             }
+
+            #endregion
+
+            #region Sound
+
+            _shootSound = new WindowsMediaPlayer
+            {
+                URL = "Sound\\ShootSound.wav",
+                settings = { volume = 5, },
+            };
+
+            _gameSound = new WindowsMediaPlayer();
+            _gameSound.URL = "Sound\\Kane_Brown_Like_I_Love_Country_Music.wav";
+            _gameSound.settings.setMode("loop", true);
+            _gameSound.settings.volume = 5;
+
+            _enemyKilledSound = new WindowsMediaPlayer()
+            {
+                URL = "Sound\\EnemyKilledSound.wav",
+                settings = { volume = 30, },
+            };
+
+            _gameSound.controls.play();
 
             #endregion
         }

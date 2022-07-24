@@ -74,18 +74,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -96,10 +96,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Image\Background.jpg" />
+    <EmbeddedResource Include="Resources\Image\Background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Image\Cowboy_Run.gif" />
+    <EmbeddedResource Include="Resources\Image\Cowboy_Run.gif" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -143,9 +143,14 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Sound\Kane_Brown_Like_I_Love_Country_Music.wav" />
-    <Resource Include="Resources\Sound\ShootSound.wav" />
+    <EmbeddedResource Include="Resources\Sound\Kane_Brown_Like_I_Love_Country_Music.wav" />
+    <EmbeddedResource Include="Resources\Sound\ShootSound.wav" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Image\Cowboy_Static.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sound\EnemyKilledSound.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
